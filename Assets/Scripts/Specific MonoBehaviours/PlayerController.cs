@@ -5,8 +5,10 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour
 {
 	// Components.
-	private Rigidbody2D rb;
+	[HideInInspector]
+	public Rigidbody2D rb;
 	private Animator anim;
+	private float gravity = 2f;
 
 	// Movement.
 	private float speed = 3f;
@@ -19,26 +21,32 @@ public class PlayerController : MonoBehaviour
 	// Grounded
 	public LayerMask whatIsGround; // Inspector.
 	public Transform groundCheck; // Inspector.
-	[SerializeField]private bool grounded;
+	public bool grounded;
 	private float groundCheckRadius;
 
-    void Start()
-    {
+	// Look direction
+	private bool facingRight = false;
+
+
+
+	void Start()
+	{
 		rb = GetComponent<Rigidbody2D>();
 		anim = GetComponent<Animator>();
-    }
+		rb.gravityScale = gravity;
+	}
 
-    void Update()
-    {
+	void Update()
+	{
 		Movement();
-		Grounded();
+		Facing();
 
 		if (grounded)
 		{
 			if (Input.GetButtonDown("Jump"))
 				Jump();
 		}
-    }
+	}
 
 	private void Movement()
 	{
@@ -52,21 +60,24 @@ public class PlayerController : MonoBehaviour
 
 	private void Jump()
 	{
+		Debug.Log("Jump called");
 		verticalMove = Input.GetAxis("Vertical");
-		rb.AddForce(jumpForce, ForceMode2D.Impulse); 
+		rb.AddForce(jumpForce, ForceMode2D.Impulse);
 	}
 
-	// Check if the player is on the ground.
-	private void Grounded()
+	void Facing() // calls FlipSprite()
 	{
-		grounded = Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, whatIsGround);
-		if (grounded)
+		if (!facingRight && rb.velocity.x > 0 || facingRight && rb.velocity.x < 0)
 		{
-			anim.SetBool("Grounded", true);
+			FlipSprite();
 		}
-		else
-		{
-			anim.SetBool("Grounded", false);
-		}
+	}
+
+	void FlipSprite()
+	{
+		facingRight = !facingRight;
+		Vector3 theScale = transform.localScale;
+		theScale.x *= -1;
+		transform.localScale = theScale;
 	}
 }
