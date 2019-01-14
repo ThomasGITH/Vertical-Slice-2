@@ -22,8 +22,6 @@ public class PlayerController : MonoBehaviour
 	[SerializeField]private bool grounded;
 	private float groundCheckRadius;
 
-
-
     void Start()
     {
 		rb = GetComponent<Rigidbody2D>();
