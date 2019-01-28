@@ -9,7 +9,11 @@ public class Patroille_walking : MonoBehaviour
     private float border_left, border_right;
     private Rigidbody2D rb;
 
-    void Start()
+	private Vector3 theScale;
+	private float x, x2;
+
+
+	void Start()
     {
         distance /= 2;
         border_left = transform.position.x - distance;
@@ -24,19 +28,21 @@ public class Patroille_walking : MonoBehaviour
         {
             rb = GetComponent<Rigidbody2D>();
         }
-    }
 
-    void Update()
+		theScale = transform.localScale;
+		x = transform.localScale.x;
+		x2 = x * -1;
+	}
+
+	void Update()
     {
         if (transform.position.x < border_left)
         {
-            walking_clockwards = true;
-            GetComponent<SpriteRenderer>().flipX = !GetComponent<SpriteRenderer>().flipX;
+			walking_clockwards = true;
         }
         else if (transform.position.x > border_right)
         {
-            walking_clockwards = false;
-            GetComponent<SpriteRenderer>().flipX = !GetComponent<SpriteRenderer>().flipX;
+			walking_clockwards = false;
         }
 
         if (use_rigidbody)
@@ -47,5 +53,20 @@ public class Patroille_walking : MonoBehaviour
         {
             transform.Translate(walking_clockwards ? speed : -speed, 0, 0);
         }
+
+		//if (walking_clockwards) FlipSprite();
+
+		transform.localScale = new Vector3(rb.velocity.x > 0 ? x2 : x,transform.localScale.y, transform.localScale.z);
+
+		
     }
+
+	void FlipSprite()
+	{
+		Debug.Log("FlipSprite called");
+		walking_clockwards = !walking_clockwards;
+		Vector3 theScale = transform.localScale;
+		theScale.x *= -1;
+		transform.localScale = theScale;
+	}
 }

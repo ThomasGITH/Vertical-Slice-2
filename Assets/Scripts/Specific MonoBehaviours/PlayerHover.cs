@@ -3,12 +3,10 @@ using System.Collections;
 
 public class PlayerHover : MonoBehaviour
 {
-	[SerializeField]
-	private float hoverHeight = 3f; // Desired hover height.
-	[SerializeField]
+	private float hoverHeight = 3.3f; // Desired hover height.
+	private float hoverGap = 1.5f; // Less height for grounded.
 	private float hoverForce = 9f;
-	[SerializeField]
-	private float damping = 0.3f;
+	private float damping = 0.3f; // Smoothing.
 
 	private PlayerController _pc;
 
@@ -48,6 +46,6 @@ public class PlayerHover : MonoBehaviour
 	private void Grounded()
 	{
 		RaycastHit2D groundRay = Physics2D.Raycast(transform.position, -Vector2.up, hoverHeight, _pc.whatIsGround);
-		_pc.grounded = Physics2D.Raycast(transform.position, -Vector2.up, hoverHeight, _pc.whatIsGround);
+		_pc.grounded = Physics2D.Raycast(transform.position, -Vector2.up, (hoverHeight / 2), _pc.whatIsGround);
 	}
 }

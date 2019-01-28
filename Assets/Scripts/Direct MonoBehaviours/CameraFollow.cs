@@ -6,6 +6,8 @@ public class CameraFollow : MonoBehaviour
 {
 	// Drag inspector. The target to follow.
 	public Transform target;
+	public bool clamp;
+	public Vector2 clampX, clampY;
 
 	// Speed at which the camera follows the player.
 	private float smoothSpeed = 10f;
@@ -14,16 +16,23 @@ public class CameraFollow : MonoBehaviour
 	[HideInInspector]
 	public Vector3 offset = new Vector3(0, 0, -8);
 
-    private void FixedUpdate()
-    {
+	private void FixedUpdate()
+	{
 		Follow();
-    }
+	}
 
 	// Find the target, move towards target.
 	void Follow()
 	{
 		Vector3 desiredPosition = target.position + offset;
 		Vector3 smoothedPosition = Vector3.Lerp(transform.position, desiredPosition, smoothSpeed * Time.deltaTime);
-        transform.position = new Vector3(Mathf.Clamp(smoothedPosition.x, 15.8f, 55.3f), Mathf.Clamp(smoothedPosition.y, 1.06f, 10), smoothedPosition.z);
+		if (clamp)
+		{
+			transform.position = new Vector3(Mathf.Clamp(smoothedPosition.x, clampX.x, clampX.y), Mathf.Clamp(smoothedPosition.y, clampY.x, clampY.y), smoothedPosition.z);
+		}
+		else
+		{
+			transform.position = smoothedPosition;
+		}
 	}
 }

@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 public class PlayerController : MonoBehaviour
 {
@@ -8,24 +9,38 @@ public class PlayerController : MonoBehaviour
 	[HideInInspector]
 	public Rigidbody2D rb;
 	private Animator anim;
-	private float gravity = 2f;
+	private float gravity = 4f;
+	public float velocity;
 
 	// Movement.
-	private float speed = 3f;
+	private float speed = 7f;
 	private float horizontalMove, verticalMove;
 	private Vector2 movement;
 
 	// Jump.
-	private Vector2 jumpForce = new Vector2(0, 10f);
+	private Vector2 jumpForce = new Vector2(0, 15f);
 
-	// Grounded
+	// Grounded.
 	public LayerMask whatIsGround; // Inspector.
 	public Transform groundCheck; // Inspector.
 	public bool grounded;
 	private float groundCheckRadius;
 
-	// Look direction
+	// Look direction.
 	private bool facingRight = false;
+
+	// Flamethrower event.
+	public delegate void onFlamethrower();
+	public static event onFlamethrower evt_flames;
+	public delegate void onStopFlamethrower();
+	public static event onStopFlamethrower evt_stopFlames;
+
+	public delegate void onPlayerAttack();
+	public static event onPlayerAttack evt_playerAttack;
+
+	// Death event.
+	public delegate void onDeath();
+	public static event onDeath evt_death;
 
 
 
@@ -41,18 +56,24 @@ public class PlayerController : MonoBehaviour
 		Movement();
 		Facing();
 
-		if (grounded)
-		{
-			if (Input.GetButtonDown("Jump"))
-				Jump();
-		}
+		if (grounded && Input.GetButtonDown("Jump")) Jump();
+
+		if (Input.GetKey(KeyCode.LeftShift)) evt_flames();
+
+		if (Input.GetKeyUp(KeyCode.LeftShift)) evt_stopFlames();
 	}
 
 	private void Movement()
 	{
 		if (Input.GetAxis("Horizontal") != 0)
 		{
-			horizontalMove = Input.GetAxis("Horizontal") * speed;
+			horizontalMove = Input.GetAxisRaw("Horizontal") * speed;
+			movement = new Vector2(horizontalMove, rb.velocity.y);
+			rb.velocity = Vector2.Lerp(rb.velocity, movement, 15 * Time.deltaTime);
+		}
+		else
+		{
+			horizontalMove = 0;
 			movement = new Vector2(horizontalMove, rb.velocity.y);
 			rb.velocity = Vector2.Lerp(rb.velocity, movement, 15 * Time.deltaTime);
 		}
@@ -60,17 +81,13 @@ public class PlayerController : MonoBehaviour
 
 	private void Jump()
 	{
-		Debug.Log("Jump called");
 		verticalMove = Input.GetAxis("Vertical");
 		rb.AddForce(jumpForce, ForceMode2D.Impulse);
 	}
 
 	void Facing() // calls FlipSprite()
 	{
-		if (!facingRight && rb.velocity.x > 0 || facingRight && rb.velocity.x < 0)
-		{
-			FlipSprite();
-		}
+		if (!facingRight && Input.GetAxis("Horizontal") > 0 || facingRight && Input.GetAxis("Horizontal") < 0) FlipSprite();
 	}
 
 	void FlipSprite()
