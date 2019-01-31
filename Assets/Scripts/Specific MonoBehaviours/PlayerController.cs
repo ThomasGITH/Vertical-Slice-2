@@ -8,7 +8,7 @@ public class PlayerController : MonoBehaviour
 	// Components.
 	[HideInInspector]
 	public Rigidbody2D rb;
-	private Animator anim;
+	public Animator anim;
 	private float gravity = 4f;
 	public float velocity;
 
@@ -18,7 +18,7 @@ public class PlayerController : MonoBehaviour
 	private Vector2 movement;
 
 	// Jump.
-	private Vector2 jumpForce = new Vector2(0, 15f);
+	private Vector2 jumpForce = new Vector2(0, 10f);
 
 	// Grounded.
 	public LayerMask whatIsGround; // Inspector.
@@ -38,6 +38,8 @@ public class PlayerController : MonoBehaviour
 	public delegate void onPlayerAttack();
 	public static event onPlayerAttack evt_playerAttack;
 
+	private PlayerStats _stats;
+
 	// Death event.
 	public delegate void onDeath();
 	public static event onDeath evt_death;
@@ -47,8 +49,9 @@ public class PlayerController : MonoBehaviour
 	void Start()
 	{
 		rb = GetComponent<Rigidbody2D>();
-		anim = GetComponent<Animator>();
 		rb.gravityScale = gravity;
+		anim = GetComponent<Animator>();
+		_stats = GetComponent<PlayerStats>();
 	}
 
 	void Update()
@@ -58,9 +61,13 @@ public class PlayerController : MonoBehaviour
 
 		if (grounded && Input.GetButtonDown("Jump")) Jump();
 
-		if (Input.GetKey(KeyCode.LeftShift)) evt_flames();
+		// Start flamethrower.
+		if (Input.GetKey(KeyCode.LeftShift) && _stats.currentFire > 3) evt_flames();
+		if (Input.GetKey(KeyCode.LeftShift)) anim.SetBool("isAttacking", true);
 
+		// End flamethrower.
 		if (Input.GetKeyUp(KeyCode.LeftShift)) evt_stopFlames();
+		if (Input.GetKeyUp(KeyCode.LeftShift)) anim.SetBool("isAttacking", false);
 	}
 
 	private void Movement()

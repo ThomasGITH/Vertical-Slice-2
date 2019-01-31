@@ -4,38 +4,41 @@ using UnityEngine;
 
 public class Enemy : MonoBehaviour
 {
-	[SerializeField] private float health, damage;
+	public float health, damage;
+
+	private PlayerStats _stats;
+	private Animator anim;
 
 	public delegate void onAttack();
-	public static event onAttack dealDamage; 
+	public static event onAttack evt_dealDamage;
+
+	// Death event
+	public delegate void onDeath();
+	public static event onDeath evt_bearDeath;
 
 	private void Start()
 	{
 		// Stats.
 		health = 30;
-		damage = 5;
+		damage = 6;
 
-		// Subscribe to event.
-		dealDamage += DealingDamage;
+		// Components.
+		_stats = GameObject.Find("Player").GetComponentInChildren<PlayerStats>();
+		anim = GetComponentInChildren<Animator>();
 	}
 
 	private void Update()
 	{
-		if (health <= 0) Death();
+		if (health <= 0) evt_bearDeath();
 	}
 
-	private void DealingDamage()
+	public void DealDamage(float damage)
 	{
-		dealDamage();
+		_stats.currentHealth -= damage;
 	}
 
 	public void TakeDamage(float dmg)
 	{
 		health -= dmg * Time.deltaTime;
-	}
-
-	private void Death()
-	{
-		Destroy(gameObject);
 	}
 }

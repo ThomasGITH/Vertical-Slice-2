@@ -14,6 +14,9 @@ public class PlayerStats : MonoBehaviour
 	[HideInInspector]
 	public float baseHealth, currentHealth, maxHealth, baseFire, currentFire, maxFire;
 
+	// Components.
+	private PlayerController _pc;
+
 	// Text components.
 	public Text levelText, healthText, fireText;
 
@@ -24,10 +27,13 @@ public class PlayerStats : MonoBehaviour
 
 	// Take damage.
 	public GameObject screenFlash;
+	public Camera cam;
 
 
 	void Start()
     {
+		// Components.
+		_pc = GetComponent<PlayerController>();
 
 		baseHealth = 35;
 		baseFire = 100;
@@ -38,9 +44,9 @@ public class PlayerStats : MonoBehaviour
 		currentHealth = maxHealth;
 		currentFire = maxFire;
 
-		// Subscribe to Flamethrower event
-		PlayerController.evt_flames += FlamethrowerCost;
 
+		// Subscribe to events.
+		PlayerController.evt_flames += FlamethrowerCost;
     }
 
     void Update()
@@ -49,8 +55,10 @@ public class PlayerStats : MonoBehaviour
 		UpdateFire(); // Update fire value & UI.
 		CanFire(); // Checks if the player can use flamethrower.
 
-		if (Input.GetKeyDown(KeyCode.H))
-			TakeDamage(5);
+		if (currentFire < 100 && !firing) currentFire += fireRegen * Time.deltaTime; // Flamethrower regeneration.
+
+		if (Input.GetKeyDown(KeyCode.H)) TakeDamage(5);
+		if (currentHealth <= 0) Death();
 	}
 
 	private void UpdateHealth()
@@ -80,15 +88,19 @@ public class PlayerStats : MonoBehaviour
 		return currentHealth / maxHealth;
 	}
 
-	private void TakeDamage(float damage)
+	public void TakeDamage(float damage)
 	{
 		currentHealth -= damage;
 		screenFlash.GetComponent<Animator>().SetTrigger("Flash");
+		cam.GetComponent<Animator>().SetTrigger("Shake");
 	}
 
 	private void Flamethrower(float fireDuration)
 	{
-		currentFire -= fireDuration;
+		if (currentFire > 0)
+		{
+			currentFire -= fireDuration;
+		}
 	}
 
 	private void FlamethrowerCost()
@@ -97,9 +109,12 @@ public class PlayerStats : MonoBehaviour
 		{
 			Flamethrower(25f * Time.deltaTime);
 		}
-		else
-		{
-			currentFire += fireRegen * Time.deltaTime;
-		}
+	}
+
+	private void Death()
+	{
+		// If player dies..
+		GetComponent<PlayerHover>().enabled = false;
+		_pc.anim.SetTrigger("Death");
 	}
 }

@@ -1,0 +1,12 @@
+Deze build bevat:
+
+Player
+	+ Idle animation
+Canvas
+	+ Health UI
+	+ Firebar UI
+Enemy Bear
+	+ Walk animation
+	+ Attack animation
+	+ Patrol script
+	- can die
