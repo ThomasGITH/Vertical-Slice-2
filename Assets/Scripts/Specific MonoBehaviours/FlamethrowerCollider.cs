@@ -13,7 +13,10 @@ public class FlamethrowerCollider : MonoBehaviour
     }
 
 	private void OnTriggerStay2D(Collider2D other)
-	{
-		if (other.tag == "Enemy") other.GetComponent<Enemy>().TakeDamage(damage);
+	{	
+		if (other != null)
+		{
+			if (other.tag == "Enemy") other.GetComponent<Enemy>().TakeDamage(damage);
+		}
 	}
 }

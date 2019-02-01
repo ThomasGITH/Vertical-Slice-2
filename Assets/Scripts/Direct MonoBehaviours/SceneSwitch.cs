@@ -1,10 +1,10 @@
 ﻿using UnityEngine;
-using UnityEditor.SceneManagement;
+using UnityEngine.SceneManagement;
 
 public class SceneSwitch : MonoBehaviour
 {
     public void switchTo(string name)
     {
-        EditorSceneManager.LoadScene(name);
+        SceneManager.LoadScene(name);
     }
 }

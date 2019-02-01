@@ -10,9 +10,9 @@ public class Patroille_walking : MonoBehaviour
 
 	// Components.
 	private Rigidbody2D rb;
-	public Animator anim;
 	private PlayerStats _stats;
 	private Enemy _enemy;
+	[HideInInspector] public Animator anim;
 
 	private Vector3 theScale;
 	private float x, x2;
@@ -23,18 +23,18 @@ public class Patroille_walking : MonoBehaviour
 
 	void Start()
 	{
+		_stats = GameObject.Find("Player").GetComponentInChildren<PlayerStats>();
+		_enemy = GetComponent<Enemy>();
+		anim = GetComponentInChildren<Animator>();
+
 		distance /= 2;
 		border_left = transform.position.x - distance;
 		border_right = transform.position.x + distance;
 		moveSpeed = speed;
-		_stats = GameObject.Find("Player").GetComponentInChildren<PlayerStats>();
-		_enemy = GetComponent<Enemy>();
-
-		anim = GetComponentInChildren<Animator>();
 
 		if (flip_sprite) GetComponent<SpriteRenderer>().flipX = !GetComponent<SpriteRenderer>().flipX;
 
-		if (use_rigidbody)rb = GetComponent<Rigidbody2D>();
+		if (use_rigidbody) rb = GetComponent<Rigidbody2D>();
 
 		theScale = transform.localScale;
 		x = transform.localScale.x;
@@ -42,9 +42,6 @@ public class Patroille_walking : MonoBehaviour
 
 		// Attack.
 		attackCooldown = 0;
-
-		// Death.
-		Enemy.evt_bearDeath += Death;
 	}
 
 	void Update()
@@ -64,6 +61,7 @@ public class Patroille_walking : MonoBehaviour
 		}
 		else
 		{
+			speed = _enemy.speed;
 			transform.Translate(walking_clockwards ? speed : -speed, 0, 0);
 		}
 
@@ -83,7 +81,11 @@ public class Patroille_walking : MonoBehaviour
 
 	private void OnTriggerStay2D(Collider2D other)
 	{
-		if (other.tag == "Player") AttackTarget();
+		if (other.tag == "Player")
+		{
+			if (_enemy.health > 0) AttackTarget();
+		}
+		
 	}
 
 	private void OnTriggerExit2D(Collider2D other)
@@ -104,14 +106,8 @@ public class Patroille_walking : MonoBehaviour
 
 	private void Patrol()
 	{
-		speed = moveSpeed;
+		speed = _enemy.speed;
+		//speed = moveSpeed;
 		anim.SetTrigger("Walk");
-	}
-
-	private void Death()
-	{
-		speed = 0;
-		anim.SetTrigger("Death");
-		Destroy(gameObject, 3f);
 	}
 }

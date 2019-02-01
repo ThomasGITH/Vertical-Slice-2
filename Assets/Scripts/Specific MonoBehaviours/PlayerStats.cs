@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class PlayerStats : MonoBehaviour
 {
@@ -28,6 +29,7 @@ public class PlayerStats : MonoBehaviour
 	// Take damage.
 	public GameObject screenFlash;
 	public Camera cam;
+	public static bool isDead;
 
 
 	void Start()
@@ -57,14 +59,18 @@ public class PlayerStats : MonoBehaviour
 
 		if (currentFire < 100 && !firing) currentFire += fireRegen * Time.deltaTime; // Flamethrower regeneration.
 
-		if (Input.GetKeyDown(KeyCode.H)) TakeDamage(5);
+		// Developer cheat code [Self kill]
+		if (Input.GetKeyDown(KeyCode.H)) InstaKill();
+
+		// Die conditions
 		if (currentHealth <= 0) Death();
+		if (transform.position.y < -15) InstaKill();
 	}
 
 	private void UpdateHealth()
 	{
 		healthBar.value = Mathf.Lerp(healthBar.value, CalculateHealth(), lerpSpeed * Time.deltaTime);
-		healthText.text = currentHealth.ToString();
+		healthText.text = currentHealth.ToString(); // Not visable in final build.
 	}
 
 	private void UpdateFire() // Also runs CanFire.
@@ -115,6 +121,17 @@ public class PlayerStats : MonoBehaviour
 	{
 		// If player dies..
 		GetComponent<PlayerHover>().enabled = false;
+		isDead = true;
 		_pc.anim.SetTrigger("Death");
+		Invoke("DeathScreen", 3f);
 	}
+
+	private void DeathScreen()
+	{
+		// SceneSwitch, switchTo("GameOver");
+		isDead = false;
+		SceneManager.LoadScene("GameOver");
+	}
+
+	private void InstaKill() { DeathScreen(); }
 }

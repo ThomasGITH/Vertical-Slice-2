@@ -6,11 +6,12 @@ using System;
 public class PlayerController : MonoBehaviour
 {
 	// Components.
-	[HideInInspector]
-	public Rigidbody2D rb;
-	public Animator anim;
+	[HideInInspector] public Rigidbody2D rb;
+	[HideInInspector] public Animator anim;
+	private PlayerStats _stats;
 	private float gravity = 4f;
 	public float velocity;
+	public static bool gameOver = false;
 
 	// Movement.
 	private float speed = 7f;
@@ -35,17 +36,6 @@ public class PlayerController : MonoBehaviour
 	public delegate void onStopFlamethrower();
 	public static event onStopFlamethrower evt_stopFlames;
 
-	public delegate void onPlayerAttack();
-	public static event onPlayerAttack evt_playerAttack;
-
-	private PlayerStats _stats;
-
-	// Death event.
-	public delegate void onDeath();
-	public static event onDeath evt_death;
-
-
-
 	void Start()
 	{
 		rb = GetComponent<Rigidbody2D>();
@@ -56,10 +46,12 @@ public class PlayerController : MonoBehaviour
 
 	void Update()
 	{
-		Movement();
-		Facing();
-
-		if (grounded && Input.GetButtonDown("Jump")) Jump();
+		if (!PlayerStats.isDead)
+		{
+			Movement();
+			Facing();
+			if (grounded && Input.GetButtonDown("Jump")) Jump();
+		}
 
 		// Start flamethrower.
 		if (Input.GetKey(KeyCode.LeftShift) && _stats.currentFire > 3) evt_flames();
@@ -68,6 +60,10 @@ public class PlayerController : MonoBehaviour
 		// End flamethrower.
 		if (Input.GetKeyUp(KeyCode.LeftShift)) evt_stopFlames();
 		if (Input.GetKeyUp(KeyCode.LeftShift)) anim.SetBool("isAttacking", false);
+
+		// Force quit game.
+		if (gameOver)
+			if (Input.GetKeyDown(KeyCode.Escape)) QuitGame();
 	}
 
 	private void Movement()
@@ -103,5 +99,10 @@ public class PlayerController : MonoBehaviour
 		Vector3 theScale = transform.localScale;
 		theScale.x *= -1;
 		transform.localScale = theScale;
+	}
+
+	private void QuitGame()
+	{
+		Application.Quit();
 	}
 }

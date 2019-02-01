@@ -5,34 +5,32 @@ using UnityEngine;
 public class Flamethrower : MonoBehaviour
 {
 	public ParticleSystem[] ps_flames;
+	private PlayerStats _stats;
 	public BoxCollider2D aoeBox;
-	private bool firing;
-
-	private float fireDamage;
 
     void Start()
     {
 		PlayerController.evt_flames += Flames;
 		PlayerController.evt_stopFlames += StopFlames;
-
-		fireDamage = 1f;
 	}
 
     void Update()
     {
-
+		if (PlayerStats.isDead)
+		{
+			PlayerController.evt_flames -= Flames;
+			PlayerController.evt_flames -= StopFlames;
+		}
 	}
 
 	private void Flames()
 	{
-		foreach (ParticleSystem flame in ps_flames) flame.Emit(2);
-		firing = true;
-		aoeBox.enabled = true;
+		foreach (ParticleSystem flame in ps_flames) if (flame != null) flame.Emit(2);
+		if (aoeBox != null) aoeBox.enabled = true;
 	}
 
 	private void StopFlames()
 	{
-		firing = false;
-		aoeBox.enabled = false;
+		if (aoeBox != null) aoeBox.enabled = false;
 	}
 }

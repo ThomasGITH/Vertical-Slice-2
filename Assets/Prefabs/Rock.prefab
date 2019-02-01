@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 585046937}
   - component: {fileID: 585046936}
   - component: {fileID: 585046938}
+  - component: {fileID: 585046939}
   m_Layer: 0
   m_Name: Spikes 3
   m_TagString: Enemy
@@ -110,7 +111,7 @@ PolygonCollider2D:
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
@@ -165,6 +166,18 @@ PolygonCollider2D:
       - {x: 0.345, y: -0.49499997}
       - {x: 0.965, y: -0.49499997}
       - {x: 0.995, y: -0.465}
+--- !u!114 &585046939
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 585046934}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a9673be25953e8d47ba48fdbf613b744, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1923711909
 GameObject:
   m_ObjectHideFlags: 0
@@ -453,7 +466,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3550197640169391498}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -1.43, y: 2.33, z: -0.29737574}
+  m_LocalPosition: {x: -1.43, y: 2.84, z: -0.29737574}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 2976844056849523793}
@@ -1680,13 +1693,14 @@ PolygonCollider2D:
       - {x: -4.505, y: 2.575}
       - {x: -4.615, y: 2.5049999}
       - {x: -4.7349997, y: 2.415}
-      - {x: -4.8849998, y: 2.2749999}
-      - {x: -5.065, y: 2.085}
-      - {x: -5.085, y: 2.0349998}
-      - {x: -5.085, y: 1.995}
-      - {x: -5.045, y: 1.9549999}
-      - {x: -4.9249997, y: 1.9549999}
-      - {x: -4.795, y: 2.0249999}
+      - {x: -3.8211472, y: 2.888465}
+      - {x: -3.9312568, y: 2.838242}
+      - {x: -3.780412, y: 2.8658955}
+      - {x: -3.694998, y: 2.9190803}
+      - {x: -3.4996912, y: 3.065449}
+      - {x: -7.7661986, y: 5.0638223}
+      - {x: -4.6376743, y: 2.5451686}
+      - {x: -6.192768, y: 3.391707}
       - {x: -4.435, y: 2.175}
       - {x: -4.245, y: 2.225}
       - {x: -4.005, y: 2.2849998}
@@ -1940,6 +1954,7 @@ GameObject:
   - component: {fileID: 1354865788689311563}
   - component: {fileID: 5524865236278566501}
   - component: {fileID: 8112471726677363609}
+  - component: {fileID: 8112471726677363610}
   m_Layer: 0
   m_Name: Spikes 2
   m_TagString: Enemy
@@ -2038,7 +2053,7 @@ PolygonCollider2D:
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
@@ -2093,6 +2108,18 @@ PolygonCollider2D:
       - {x: 0.345, y: -0.49499997}
       - {x: 0.965, y: -0.49499997}
       - {x: 0.995, y: -0.465}
+--- !u!114 &8112471726677363610
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8112471726677363608}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a9673be25953e8d47ba48fdbf613b744, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &8921099043990454518
 GameObject:
   m_ObjectHideFlags: 0
@@ -2105,6 +2132,7 @@ GameObject:
   - component: {fileID: 6600041312227578479}
   - component: {fileID: 710740510988119804}
   - component: {fileID: 8921099043990454519}
+  - component: {fileID: 8921099043990454520}
   m_Layer: 0
   m_Name: spijks
   m_TagString: Enemy
@@ -2162,7 +2190,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 3
+  m_SortingOrder: 5
   m_Sprite: {fileID: 21300000, guid: a1b5f2fd64d8b1241aebece4c140e748, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -2203,7 +2231,7 @@ PolygonCollider2D:
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
@@ -2258,6 +2286,18 @@ PolygonCollider2D:
       - {x: 0.345, y: -0.49499997}
       - {x: 0.965, y: -0.49499997}
       - {x: 0.995, y: -0.465}
+--- !u!114 &8921099043990454520
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8921099043990454518}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a9673be25953e8d47ba48fdbf613b744, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &9156776832736140236
 GameObject:
   m_ObjectHideFlags: 0

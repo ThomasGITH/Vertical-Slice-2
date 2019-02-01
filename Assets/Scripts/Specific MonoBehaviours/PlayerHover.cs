@@ -4,7 +4,6 @@ using System.Collections;
 public class PlayerHover : MonoBehaviour
 {
 	[SerializeField] private float hoverHeight = 5.5f; // Desired hover height.
-	[SerializeField] private float hoverGap = 1.5f; // Less height for grounded.
 	[SerializeField] private float hoverForce = 9f;
 	[SerializeField] private float damping = 1f; // Smoothing.
 
