@@ -69,6 +69,12 @@ public class Patroille_walking : MonoBehaviour
 
 		// Attack.
 		attackCooldownStart += Time.deltaTime;
+
+		// Avoid moving when dead.
+		if (_enemy.health <= 0)
+		{
+			speed = 0; _enemy.speed = 0;
+		}
 	}
 
 	void FlipSprite()

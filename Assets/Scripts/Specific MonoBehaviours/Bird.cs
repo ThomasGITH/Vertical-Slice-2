@@ -6,7 +6,6 @@ public class Bird : MonoBehaviour
 {
 	[SerializeField] public float speed;
 	[SerializeField] private float moveSpeed;
-	private float health = 40;
 
 	public bool walkingClockwards, facingLeft, flipSprite, useRigidbody;
 
